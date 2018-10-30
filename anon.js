@@ -1,5 +1,4 @@
 MutationObserver = window.MutationObserver;
-console.log("updated");
 let debounceTimeout = null;
 const MUTATION_TIMEOUT = 150; // ms
 
