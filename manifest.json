@@ -1,0 +1,16 @@
+{
+  "name": "Extra-anonymous for Piazza",
+  "version": "1.1",
+  "manifest_version": 2,
+  "description": "Shows user as anonymous by default, username on mouseover",
+  "permissions": ["https://*.piazza.com/*"],
+  "icons": { "16": "icon16.bmp",
+           "48": "icon48.bmp",
+          "128": "icon128.bmp" },
+  "content_scripts": [
+    {
+      "matches": ["https://*.piazza.com/*"],
+      "js": ["anon.js"]
+    }
+  ]
+}
