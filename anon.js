@@ -59,7 +59,7 @@ function anonify() {
                 const anonName = getAnonName(smallTextNode, num);
                 // and remove
                 smallTextNode.remove();
-                nameElem.title = name; // Show name on hover
+                nameElem.title = trimAnonName(name); // Show name on hover
                 nameElem.innerHTML = anonName; // Replace name
             }
         } catch (e) {
@@ -72,6 +72,10 @@ function getAnonName(smallTextNode, num) {
     const nameToClassmates = smallTextNode.textContent;
     const matches = nameToClassmates.match(ANON_INFO_REGEX) || [];
     return matches[1] || "Anonymous #" + num;
+}
+
+function trimAnonName(fullName) {
+    return fullName.replace(ANON_INFO_REGEX, "").trim();
 }
 
 function selfMutations(mutations) {
