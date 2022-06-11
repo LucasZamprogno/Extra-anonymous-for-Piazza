@@ -1,6 +1,7 @@
 MutationObserver = window.MutationObserver;
 let debounceTimeout = null;
 const MUTATION_TIMEOUT = 150; // ms
+const ANON_INFO_REGEX = /\((.*) to classmates\)/;
 
 const main = document.querySelector("div.main_panel");
 const observer = new MutationObserver(function (mutations) {
@@ -53,15 +54,28 @@ function anonify() {
                     num = anonCount;
                 }
                 nameElem.setAttribute("anon", "extra"); // Won't get re-anonymized after more DOM mutations
-                // "anon to classmates" span can be sibling or child for some reason, get via parent and remove
-                nameElem.parentNode.querySelector("span.smallText").remove();
-                nameElem.title = name; // Show name on hover
-                nameElem.innerHTML = "Anonymous #" + num; // Replace name
+                // "anon to classmates" span can be sibling or child for some reason, get via parent and copy anon name.
+                const smallTextNode = nameElem.parentNode.querySelector("span.smallText");
+                const anonName = getAnonName(smallTextNode, num);
+                // and remove
+                smallTextNode.remove();
+                nameElem.title = trimAnonName(name); // Show name on hover
+                nameElem.innerHTML = anonName; // Replace name
             }
         } catch (e) {
 	        // Just in case something got unexpectedly modified/removed (likely poor debounce timing)
         }
     }
+}
+
+function getAnonName(smallTextNode, num) {
+    const nameToClassmates = smallTextNode.textContent;
+    const matches = nameToClassmates.match(ANON_INFO_REGEX) || [];
+    return matches[1] || "Anonymous #" + num;
+}
+
+function trimAnonName(fullName) {
+    return fullName.replace(ANON_INFO_REGEX, "").trim();
 }
 
 function selfMutations(mutations) {
